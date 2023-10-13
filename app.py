@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 
 TRANSACTIONS = [
     {
@@ -6,7 +6,7 @@ TRANSACTIONS = [
         "type": "expense",
         "name": "Payment for Malaria Treatment",
         "amount": -50000,
-        "date": "2023-03-01",
+        "date": "2023-03-04",
         "purpose": "Primary Healthcare",
         "location": "Ikot Esenam"
     },
@@ -15,7 +15,7 @@ TRANSACTIONS = [
         "type": "revenue",
         "name": "Internal Revenue",
         "amount": +120000,
-        "date": "2023-03-02",
+        "date": "2023-03-01",
         "purpose": "Uyo capital tax",
         "location": "Uyo"
     },
@@ -35,17 +35,25 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-  return render_template("index.html")
+  return render_template("index.html", page='Home')
 
 
 @app.route("/login")
 def login():
-  return render_template("login.html")
+  return render_template("login.html", page='Login')
 
 
 @app.route("/dashboard")
 def dashboard():
-  return render_template("dashboard.html", transactions=TRANSACTIONS)
+  return render_template("dashboard.html",
+                         transactions=TRANSACTIONS,
+                         page='Dashboard')
+
+
+# api routes
+@app.route("/api/transactions")
+def list_transactions():
+  return jsonify(TRANSACTIONS)
 
 
 if __name__ == "__main__":
